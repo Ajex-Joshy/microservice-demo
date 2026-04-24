@@ -1,15 +1,15 @@
 import "reflect-metadata";
 import express from "express";
-import { container } from "./src/config/di/container";
-import { ENV } from "./src/config/env.config";
-import { connectDB, disconnectDB } from "./src/infrastructure/db/mongo";
-import { errorHandler } from "./src/interfaces/http/middlewares/error-handler.middleware";
-import type { AuthRoutes } from "./src/interfaces/http/routes/auth.routes";
-import { TYPES } from "./src/config/di/types";
+import { container } from "./config/di/container";
+import { ENV } from "./config/env.config";
+import { connectDB, disconnectDB } from "./infrastructure/db/mongo";
+import { errorHandler } from "./interfaces/http/middlewares/error-handler.middleware";
+import type { AuthRoutes } from "./interfaces/http/routes/auth.routes";
+import { TYPES } from "./config/di/types";
 import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
-import { httpLogger } from "./src/shared/logger/http.logger";
-import { logger } from "./src/shared/logger/logger";
+import { httpLogger } from "./shared/logger/http.logger";
+import { logger } from "./shared/logger/logger";
 
 async function bootstrap() {
   await connectDB();
@@ -30,7 +30,7 @@ async function bootstrap() {
     logger.info(`User service running on port: ${ENV.PORT}`),
   );
 
-  // Graceful Shutdown
+  // Graceful Shutdown handler
   const gracefulShutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Shutting down gracefully...`);
 

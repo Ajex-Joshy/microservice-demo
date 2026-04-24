@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsx watch main.ts",
+    "dev": "npx tsx watch src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.js",
+    "start": "node dist/src/main.js",
     "lint": "biome check .",
     "format": "biome format .",
     "fix": "biome check --apply ."
