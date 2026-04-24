@@ -1,6 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
-import { OrderDTO } from "../../application/dto/OrderDTO";
+import { OrderDTO } from "../../application/dto/order.dto";
 import path from "node:path";
 const packageDef = protoLoader.loadSync(
   path.resolve(process.cwd(), "../proto/order.proto"),

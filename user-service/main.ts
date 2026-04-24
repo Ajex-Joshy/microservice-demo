@@ -1,8 +1,8 @@
-import { GetUser } from "./src/application/use-cases/GetUser";
+import { GetUser } from "./src/application/use-cases/get-user.use-case";
 import { connectDB } from "./src/infrastructure/db/mongo";
-import { MonogoUserRepository } from "./src/infrastructure/db/MongoUserRepository";
-import { OrderClient } from "./src/infrastructure/grpc/OrderClient";
-import { UserController } from "./src/interfaces/grpc/UserController";
+import { MonogoUserRepository } from "./src/infrastructure/db/mongo-user.repository";
+import { OrderClient } from "./src/infrastructure/grpc/order.client";
+import { UserController } from "./src/interfaces/grpc/user.controller";
 
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";

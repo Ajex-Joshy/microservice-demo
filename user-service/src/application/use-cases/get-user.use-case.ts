@@ -1,5 +1,5 @@
-import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { OrderDTO } from "../dto/OrderDTO";
+import { IUserRepository } from "../../domain/repositories/user.repository.interface";
+import { OrderDTO } from "../dto/order.dto";
 
 export class GetUser {
   constructor(

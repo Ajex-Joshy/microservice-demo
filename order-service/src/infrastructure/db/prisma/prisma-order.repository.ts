@@ -1,6 +1,6 @@
-import { Order } from "../../../domain/entities/Order";
-import type { IOrderRepository } from "../../../domain/repositories/IOrderRepository";
-import { prisma } from "./PrismaClient";
+import { Order } from "../../../domain/entities/order.entity";
+import type { IOrderRepository } from "../../../domain/repositories/order.repository";
+import { prisma } from "./prisma.client";
 
 export class PrismaOrderRepository implements IOrderRepository {
   async findOrderByUserId(userId: string): Promise<Order[] | null> {

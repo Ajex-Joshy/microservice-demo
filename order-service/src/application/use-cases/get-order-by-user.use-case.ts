@@ -1,6 +1,6 @@
-import type { IOrderRepository } from "../../domain/repositories/IOrderRepository";
-import type { OrderResponseDTO } from "../dto/OrderResponseDTO";
-import { OrderMapper } from "../mappers/OrderMapper";
+import type { IOrderRepository } from "../../domain/repositories/order.repository";
+import type { OrderResponseDTO } from "../dto/order-response.dto";
+import { OrderMapper } from "../mappers/order.mapper";
 
 export class GetOrderByUser {
   constructor(private repo: IOrderRepository) {}

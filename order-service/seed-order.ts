@@ -1,4 +1,4 @@
-import { prisma } from "./src/infrastructure/db/prisma/PrismaClient";
+import { prisma } from "./src/infrastructure/db/prisma/prisma.client";
 
 async function seed() {
   await prisma.order.deleteMany({});

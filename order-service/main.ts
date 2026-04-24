@@ -1,8 +1,8 @@
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
-import { PrismaOrderRepository } from "./src/infrastructure/db/prisma/PrismaOrderRepository";
-import { GetOrderByUser } from "./src/application/use-cases/GetOrderByUser";
-import { OrderController } from "./src/interfaces/grpc/OrderController";
+import { PrismaOrderRepository } from "./src/infrastructure/db/prisma/prisma-order.repository";
+import { GetOrderByUser } from "./src/application/use-cases/get-order-by-user.use-case";
+import { OrderController } from "./src/interfaces/grpc/order.controller";
 import path from "node:path";
 import "dotenv/config";
 

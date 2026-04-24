@@ -1,5 +1,5 @@
 import * as grpc from "@grpc/grpc-js";
-import { GetOrderByUser } from "../../application/use-cases/GetOrderByUser";
+import { GetOrderByUser } from "../../application/use-cases/get-order-by-user.use-case";
 
 export class OrderController {
   constructor(private useCase: GetOrderByUser) {}
