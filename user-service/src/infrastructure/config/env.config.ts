@@ -8,6 +8,7 @@ const schema = z.object({
   MONGO_URI: z.string(),
   JWT_SECRET: z.string().min(10),
   JWT_EXPIRY: z.string().regex(/^\d+(s|m|h|d)$/, "Invalid JWT expiry format"),
+  NODE_ENV: z.string().default("development"),
 });
 
 const parsed = schema.safeParse(process.env);

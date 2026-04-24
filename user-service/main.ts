@@ -7,12 +7,17 @@ import { errorHandler } from "./src/interfaces/http/middlewares/error-handler.mi
 import type { AuthRoutes } from "./src/interfaces/http/routes/auth.routes";
 import { TYPES } from "./src/types";
 import helmet from "helmet";
+import ExpressMongoSanitize from "express-mongo-sanitize";
+import { httpLogger } from "./src/shared/logger/http.logger";
+import { logger } from "./src/shared/logger/logger";
 
 async function bootstrap() {
   await connectDB();
 
   const app = express();
   app.use(helmet());
+  app.use(ExpressMongoSanitize({ replaceWith: "-" }));
+  app.use(httpLogger);
   app.use(express.json());
 
   const authRoutes = container.get<AuthRoutes>(TYPES.AuthRoutes);
@@ -22,11 +27,11 @@ async function bootstrap() {
   app.use(errorHandler);
 
   app.listen(ENV.PORT, () =>
-    console.log(`User service running on port: ${ENV.PORT}`),
+    logger.info(`User service running on port: ${ENV.PORT}`),
   );
 }
 
 bootstrap().catch((err) => {
-  console.error("Failed to start server:", err);
+  logger.error(err, "Failed to start server:");
   process.exit(1);
 });
