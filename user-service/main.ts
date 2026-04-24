@@ -6,11 +6,13 @@ import { connectDB } from "./src/infrastructure/db/mongo";
 import { errorHandler } from "./src/interfaces/http/middlewares/error-handler.middleware";
 import type { AuthRoutes } from "./src/interfaces/http/routes/auth.routes";
 import { TYPES } from "./src/types";
+import helmet from "helmet";
 
 async function bootstrap() {
   await connectDB();
 
   const app = express();
+  app.use(helmet());
   app.use(express.json());
 
   const authRoutes = container.get<AuthRoutes>(TYPES.AuthRoutes);
