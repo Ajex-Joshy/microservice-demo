@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ENV } from "../config/env.config";
+import { ENV } from "../../config/env.config";
 import { DatabaseException } from "../exceptions/Database.exception";
 import { logger } from "../../shared/logger/logger";
 

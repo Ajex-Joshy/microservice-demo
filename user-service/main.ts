@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import express from "express";
-import { container } from "./src/container/container";
-import { ENV } from "./src/infrastructure/config/env.config";
+import { container } from "./src/config/di/container";
+import { ENV } from "./src/config/env.config";
 import { connectDB, disconnectDB } from "./src/infrastructure/db/mongo";
 import { errorHandler } from "./src/interfaces/http/middlewares/error-handler.middleware";
 import type { AuthRoutes } from "./src/interfaces/http/routes/auth.routes";
-import { TYPES } from "./src/types";
+import { TYPES } from "./src/config/di/types";
 import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import { httpLogger } from "./src/shared/logger/http.logger";

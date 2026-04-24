@@ -7,7 +7,7 @@ import type { RegisterUser } from "../../../application/use-cases/register-user.
 import { UserNotFoundException } from "../../../domain/exceptions/UserNotFound.exception";
 import type { JwtService } from "../../../infrastructure/auth/jwt.service";
 import { HTTP_STATUS } from "../../../shared/constants/http-status.constants";
-import { TYPES } from "../../../types";
+import { TYPES } from "../../../config/di/types";
 
 @injectable()
 export class AuthController {

@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { UnauthenticatedException } from "../../../application/exceptions/unauthenticated.exception";
 import type { UserRole } from "../../../domain/entities/user.entity";
 import type { JwtService } from "../../../infrastructure/auth/jwt.service";
-import { TYPES } from "../../../types";
+import { TYPES } from "../../../config/di/types";
 
 export interface AuthRequest extends Request {
   user?: { userId: string; role: UserRole };

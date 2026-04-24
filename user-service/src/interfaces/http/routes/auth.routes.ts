@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../../types";
+import { TYPES } from "../../../config/di/types";
 import type { AuthController } from "../controllers/auth.controller";
 import type { AuthMiddleware } from "../middlewares/auth.middlware";
 import type { RoleMiddleware } from "../middlewares/role.middleware";

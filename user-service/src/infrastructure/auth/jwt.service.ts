@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import jwt from "jsonwebtoken";
-import { ENV } from "../config/env.config";
+import { ENV } from "../../config/env.config";
 
 @injectable()
 export class JwtService {
