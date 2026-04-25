@@ -5,20 +5,20 @@ import { OrderResponseDTO } from "@application/dto/order-response.dto";
 import { OrderMapper } from "@application/mappers/order.mapper";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@config/di/types";
+import { randomUUID } from "node:crypto";
 
 @injectable()
 export class CreateOrder {
   constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) {}
 
   async execute(
-    id: string,
     userId: string,
     item: string,
     quantity: number,
     price: number,
   ): Promise<OrderResponseDTO> {
     const order = new Order(
-      id,
+      randomUUID(),
       userId,
       item,
       quantity,

@@ -4,6 +4,9 @@ import type { AuthMiddleware } from "@interfaces/http/middlewares/auth.middlware
 import type { RoleMiddleware } from "@interfaces/http/middlewares/role.middleware";
 import { Router } from "express";
 import { inject, injectable } from "inversify";
+import { validateRequest } from "../middlewares/validation.middleware";
+import { LoginSchema } from "../validators/login.schema";
+import { RegisterSchema } from "../validators/register.schema";
 
 @injectable()
 export class AuthRoutes {
@@ -19,9 +22,17 @@ export class AuthRoutes {
   }
 
   private init() {
-    this.router.post("/auth/register", this.controller.registerUser);
+    this.router.post(
+      "/auth/register",
+      validateRequest(RegisterSchema),
+      this.controller.registerUser,
+    );
 
-    this.router.post("/auth/login", this.controller.loginUser);
+    this.router.post(
+      "/auth/login",
+      validateRequest(LoginSchema),
+      this.controller.loginUser,
+    );
 
     this.router.get("/auth/me", this.auth.handle, this.controller.me);
 

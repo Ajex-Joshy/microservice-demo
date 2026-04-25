@@ -6,12 +6,12 @@ import { TYPES } from "@config/di/types";
 
 @injectable()
 export class GetOrderById {
-	constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) { }
+  constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) {}
 
-	async execute(orderId: string): Promise<OrderResponseDTO | null> {
-		const order = await this.repo.findById(orderId);
-		if (!order) return null;
+  async execute(orderId: string): Promise<OrderResponseDTO | null> {
+    const order = await this.repo.findById(orderId);
+    if (!order) return null;
 
-		return OrderMapper.toDTO(order);
-	}
+    return OrderMapper.toDTO(order);
+  }
 }

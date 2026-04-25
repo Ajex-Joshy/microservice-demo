@@ -16,9 +16,15 @@ export class OrderController {
     @inject(TYPES.UpdateOrderStatus) private updateOrderStatusUC: UpdateOrderStatus
   ) {}
 
-  create = async (req: Request, res: Response) => {
-    const { id, userId, item, quantity, price } = req.body;
-    const order = await this.createOrderUC.execute(id, userId, item, quantity, price);
+  create = async (req: AuthRequest, res: Response) => {
+    const { item, quantity, price } = req.body;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const order = await this.createOrderUC.execute(userId, item, quantity, price);
     res.status(201).json({ success: true, data: order });
   };
 
