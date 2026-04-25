@@ -1,9 +1,9 @@
+import { TYPES } from "@config/di/types";
+import { User, UserRole } from "@domain/entities/user.entity";
+import { UserAlreadyExistsException } from "@domain/exceptions/UserAlreadyExists.exception";
+import type { IUserRepository } from "@domain/repositories/user.repository.interface";
+import type { PasswordService } from "@infrastructure/auth/password.service";
 import { inject, injectable } from "inversify";
-import { User, UserRole } from "../../domain/entities/user.entity";
-import { UserAlreadyExistsException } from "../../domain/exceptions/UserAlreadyExists.exception";
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface";
-import type { PasswordService } from "../../infrastructure/auth/password.service";
-import { TYPES } from "../../config/di/types";
 
 @injectable()
 export class RegisterUser {

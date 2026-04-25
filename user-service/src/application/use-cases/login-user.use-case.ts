@@ -1,9 +1,9 @@
+import { InvalidCredentialsException } from "@application/exceptions/invalid-credentials.exception";
+import { TYPES } from "@config/di/types";
+import type { IUserRepository } from "@domain/repositories/user.repository.interface";
+import type { JwtService } from "@infrastructure/auth/jwt.service";
+import type { PasswordService } from "@infrastructure/auth/password.service";
 import { inject, injectable } from "inversify";
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface";
-import type { JwtService } from "../../infrastructure/auth/jwt.service";
-import type { PasswordService } from "../../infrastructure/auth/password.service";
-import { TYPES } from "../../config/di/types";
-import { InvalidCredentialsException } from "../exceptions/invalid-credentials.exception";
 
 @injectable()
 export class LoginUser {

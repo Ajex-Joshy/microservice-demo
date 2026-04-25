@@ -1,7 +1,7 @@
+import { ForbiddenException } from "@application/exceptions/forbidden.exception";
+import type { AuthRequest } from "@interfaces/http/middlewares/auth.middlware";
 import type { NextFunction, Response } from "express";
 import { injectable } from "inversify";
-import { ForbiddenException } from "../../../application/exceptions/forbidden.exception";
-import type { AuthRequest } from "./auth.middlware";
 
 @injectable()
 export class RoleMiddleware {

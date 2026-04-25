@@ -1,7 +1,7 @@
 import path from "node:path";
+import type { OrderDTO } from "@application/dto/order.dto";
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
-import type { OrderDTO } from "../../application/dto/order.dto";
 
 const packageDef = protoLoader.loadSync(
   path.resolve(process.cwd(), "../proto/order.proto"),
@@ -22,7 +22,13 @@ export class OrderClient {
   getOrders(userId: string): Promise<OrderDTO[]> {
     return new Promise((resolve, reject) => {
       const client = this.client as grpc.Client & {
-        GetOrdersByUser: (arg0: { userId: string }, arg1: (err: grpc.ServiceError | null, res: { orders: unknown[] }) => void) => void
+        GetOrdersByUser: (
+          arg0: { userId: string },
+          arg1: (
+            err: grpc.ServiceError | null,
+            res: { orders: unknown[] },
+          ) => void,
+        ) => void;
       };
       client.GetOrdersByUser(
         { userId },

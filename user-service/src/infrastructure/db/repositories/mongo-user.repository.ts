@@ -1,9 +1,12 @@
+import type { User } from "@domain/entities/user.entity";
+import type { IUserRepository } from "@domain/repositories/user.repository.interface";
+import {
+  mapToDomain,
+  mapToPersistence,
+} from "@infrastructure/db/mappers/user.mapper";
+import { UserModel } from "@infrastructure/db/models/user.model";
+import { DatabaseException } from "@infrastructure/exceptions/Database.exception";
 import { injectable } from "inversify";
-import type { User } from "../../../domain/entities/user.entity";
-import type { IUserRepository } from "../../../domain/repositories/user.repository.interface";
-import { DatabaseException } from "../../exceptions/Database.exception";
-import { mapToDomain, mapToPersistence } from "../mappers/user.mapper";
-import { UserModel } from "../models/user.model";
 
 @injectable()
 export class MongoUserRepository implements IUserRepository {

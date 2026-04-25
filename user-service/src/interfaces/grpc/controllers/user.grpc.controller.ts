@@ -1,10 +1,13 @@
+import type { GetUserById } from "@application/use-cases/get-user-by-id.use-case";
+import { TYPES } from "@config/di/types";
+import { UserNotFoundException } from "@domain/exceptions/UserNotFound.exception";
 import * as grpc from "@grpc/grpc-js";
-import { GetUserCall, GetUserCallback } from "../types/user.grpc.types";
+import type {
+  GetUserCall,
+  GetUserCallback,
+} from "@interfaces/grpc/types/user.grpc.types";
+import { BaseException } from "@shared/exceptions/BaseException";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../../config/di/types";
-import { GetUserById } from "../../../application/use-cases/get-user-by-id.use-case";
-import { UserNotFoundException } from "../../../domain/exceptions/UserNotFound.exception";
-import { BaseException } from "../../../shared/exceptions/BaseException";
 
 @injectable()
 export class UserGrpcController {

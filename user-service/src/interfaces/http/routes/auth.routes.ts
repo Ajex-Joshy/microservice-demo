@@ -1,9 +1,9 @@
+import { TYPES } from "@config/di/types";
+import type { AuthController } from "@interfaces/http/controllers/auth.controller";
+import type { AuthMiddleware } from "@interfaces/http/middlewares/auth.middlware";
+import type { RoleMiddleware } from "@interfaces/http/middlewares/role.middleware";
 import { Router } from "express";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../../config/di/types";
-import type { AuthController } from "../controllers/auth.controller";
-import type { AuthMiddleware } from "../middlewares/auth.middlware";
-import type { RoleMiddleware } from "../middlewares/role.middleware";
 
 @injectable()
 export class AuthRoutes {

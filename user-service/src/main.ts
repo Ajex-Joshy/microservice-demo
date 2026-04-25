@@ -1,19 +1,19 @@
 import "reflect-metadata";
-import express from "express";
-import { container } from "./config/di/container";
-import { ENV } from "./config/env.config";
-import { connectDB, disconnectDB } from "./infrastructure/db/mongo";
-import { errorHandler } from "./interfaces/http/middlewares/error-handler.middleware";
-import type { AuthRoutes } from "./interfaces/http/routes/auth.routes";
-import { TYPES } from "./config/di/types";
-import helmet from "helmet";
-import ExpressMongoSanitize from "express-mongo-sanitize";
-import { httpLogger } from "./shared/logger/http.logger";
-import { logger } from "./shared/logger/logger";
+import { container } from "@config/di/container";
+import { TYPES } from "@config/di/types";
+import { ENV } from "@config/env.config";
+import { connectDB, disconnectDB } from "@infrastructure/db/mongo";
 import {
-  startGrpcServer,
   server as grpcServer,
-} from "./interfaces/grpc/user.grpc.server";
+  startGrpcServer,
+} from "@interfaces/grpc/user.grpc.server";
+import { errorHandler } from "@interfaces/http/middlewares/error-handler.middleware";
+import type { AuthRoutes } from "@interfaces/http/routes/auth.routes";
+import { httpLogger } from "@shared/logger/http.logger";
+import { logger } from "@shared/logger/logger";
+import express from "express";
+import ExpressMongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
 
 async function bootstrap() {
   await connectDB();

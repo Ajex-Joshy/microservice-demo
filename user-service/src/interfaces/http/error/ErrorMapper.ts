@@ -1,5 +1,5 @@
-import { BaseException } from "../../../shared/exceptions/BaseException";
-import { HTTP_STATUS } from "../../../shared/constants/http-status.constants";
+import { HTTP_STATUS } from "@shared/constants/http-status.constants";
+import { BaseException } from "@shared/exceptions/BaseException";
 
 export const mapErrorToHttp = (error: unknown) => {
   if (error instanceof BaseException && error.isOperational) {
