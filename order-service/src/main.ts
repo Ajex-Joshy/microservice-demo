@@ -1,45 +1,66 @@
-import path from "node:path";
-import { GetOrderByUser } from "@application/use-cases/get-order-by-user.use-case";
-import { PrismaOrderRepository } from "@infrastructure/db/prisma/prisma-order.repository";
-import "dotenv/config";
+import "reflect-metadata";
+import express from "express";
+import helmet from "helmet";
+import { container } from "@config/di/container";
+import { TYPES } from "@config/di/types";
+import { ENV } from "@config/env.config";
+import { OrderRoutes } from "@interfaces/http/routes/order.routes";
+import { errorHandler } from "@interfaces/http/middlewares/error-handler.middleware";
+import { httpLogger } from "@shared/logger/http.logger";
+import { logger } from "@shared/logger/logger";
+import { disconnectDB } from "@infrastructure/db/prisma/prisma.client";
 
-class InMemoryOrderRepository {
-	private readonly orders = [
-		{ id: "o101", userId: "u1", product: "MacBook Pro", quantity: 1 },
-		{ id: "o102", userId: "u1", product: "Magic Mouse", quantity: 2 },
-		{ id: "o201", userId: "u2", product: "Mechanical Keyboard", quantity: 1 },
-	];
+async function bootstrap() {
+  const app = express();
 
-	async findByUserId(userId: string) {
-		return this.orders.filter((order) => order.userId === userId) as any;
-	}
+  app.use(helmet());
+  app.use(httpLogger);
+  app.use(express.json());
 
-	async create(order: any): Promise<any> {
-		throw new Error("Method not implemented.");
-	}
-	async findById(id: string): Promise<any | null> {
-		throw new Error("Method not implemented.");
-	}
-	async updateStatus(id: string, status: any): Promise<any> {
-		throw new Error("Method not implemented.");
-	}
+  const orderRoutes = container.get<OrderRoutes>(TYPES.OrderRoutes);
+  app.use(orderRoutes.router);
+
+  app.use(errorHandler);
+
+  const server = app.listen(ENV.PORT, () => {
+    logger.info(`Order Service running on port ${ENV.PORT}`);
+  });
+
+  // Graceful Shutdown
+  let isShuttingDown = false;
+
+  const gracefulShutdown = async (signal: string) => {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+
+    logger.info(`Received ${signal}. Shutting down gracefully...`);
+
+    const timeout = setTimeout(() => {
+      logger.error("Force shutdown due to timeout");
+      process.exit(1);
+    }, 10000);
+
+    server.close(async () => {
+      try {
+        logger.info("HTTP server closed.");
+        await disconnectDB();
+        logger.info("Database connection closed.");
+        logger.info("Graceful shutdown complete.");
+        process.exit(0);
+      } catch (err) {
+        logger.error(err, "Error during graceful shutdown");
+        process.exit(1);
+      } finally {
+        clearTimeout(timeout);
+      }
+    });
+  };
+
+  process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 }
 
-function buildOrderRepository() {
-	if (process.env.USE_IN_MEMORY_DEMO === "true" || !process.env.DATABASE_URL) {
-		console.log("Using in-memory order repository");
-		return new InMemoryOrderRepository();
-	}
-
-	return new PrismaOrderRepository();
-}
-
-async function start() {
-	const repo = buildOrderRepository();
-
-	console.log("Order Service initializing layers...");
-
-	// TODO: Initialize REST framework/Express here in future step
-}
-
-start();
+bootstrap().catch((err) => {
+  logger.error(err, "Failed to start Order Service");
+  process.exit(1);
+});

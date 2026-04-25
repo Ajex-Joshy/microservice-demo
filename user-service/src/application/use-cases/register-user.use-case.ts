@@ -12,13 +12,13 @@ export class RegisterUser {
     @inject(TYPES.PasswordService) private password: PasswordService,
   ) {}
 
-  async execute(name: string, email: string, password: string) {
+  async execute(name: string, email: string, password: string, role: UserRole = UserRole.USER) {
     const exists = await this.repo.findByEmail(email);
 
     if (exists) throw new UserAlreadyExistsException(email);
 
     const hashed = await this.password.hash(password);
 
-    return this.repo.create(new User("", name, email, hashed, UserRole.USER));
+    return this.repo.create(new User("", name, email, hashed, role));
   }
 }

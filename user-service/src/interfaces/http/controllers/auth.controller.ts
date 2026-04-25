@@ -25,6 +25,7 @@ export class AuthController {
         req.body.name,
         req.body.email,
         req.body.password,
+        req.body.role,
       );
 
       // never return password

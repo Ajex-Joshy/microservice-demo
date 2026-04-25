@@ -3,9 +3,12 @@ import type { IOrderRepository } from "@domain/repositories/order.repository";
 import { OrderStatus } from "@domain/value-objects/order-status.vo";
 import { OrderResponseDTO } from "@application/dto/order-response.dto";
 import { OrderMapper } from "@application/mappers/order.mapper";
+import { inject, injectable } from "inversify";
+import { TYPES } from "@config/di/types";
 
+@injectable()
 export class CreateOrder {
-  constructor(private repo: IOrderRepository) {}
+  constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) {}
 
   async execute(
     id: string,
