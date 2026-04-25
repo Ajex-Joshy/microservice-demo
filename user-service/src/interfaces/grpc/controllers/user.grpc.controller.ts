@@ -4,6 +4,7 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../../config/di/types";
 import { GetUserById } from "../../../application/use-cases/get-user-by-id.use-case";
 import { UserNotFoundException } from "../../../domain/exceptions/UserNotFound.exception";
+import { BaseException } from "../../../shared/exceptions/BaseException";
 
 @injectable()
 export class UserGrpcController {
@@ -12,7 +13,6 @@ export class UserGrpcController {
   GetUser = async (call: GetUserCall, callback: GetUserCallback) => {
     try {
       const { userId } = call.request;
-      console.log(userId);
 
       const user = await this.getUserById.execute(userId);
 
@@ -25,9 +25,9 @@ export class UserGrpcController {
         role: user.role,
       });
     } catch (error) {
-      if (error instanceof UserNotFoundException) {
+      if (error instanceof BaseException && error.isOperational) {
         return callback({
-          code: grpc.status.NOT_FOUND,
+          code: error.grpcStatus,
           message: error.message,
         } as grpc.ServiceError);
       }
@@ -37,7 +37,7 @@ export class UserGrpcController {
       return callback({
         code: grpc.status.INTERNAL,
         message,
-      } as any);
+      } as grpc.ServiceError);
     }
   };
 }
