@@ -5,7 +5,7 @@ import { UserNotFoundException } from "@domain/exceptions/UserNotFound.exception
 
 @injectable()
 export class UserGrpcController {
-  constructor(@inject(TYPES.GetUserById) private getUserById: GetUserById) {}
+  constructor(@inject(TYPES.GetUserById) private getUserById: GetUserById) { }
 
   GetUser = async (call: any, callback: any) => {
     try {

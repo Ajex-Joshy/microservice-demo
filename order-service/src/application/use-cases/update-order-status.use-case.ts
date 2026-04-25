@@ -1,14 +1,12 @@
-import { inject, injectable } from "inversify";
-import { TYPES } from "@config/di/types";
 import type { IOrderRepository } from "@domain/repositories/order.repository";
 import type { OrderStatus } from "@domain/value-objects/order-status.vo";
 import { status } from "@grpc/grpc-js";
 import { HTTP_STATUS } from "@shared/constants/http-status.constants";
 import { BaseException } from "@shared/exceptions/BaseException";
-import { OrderResponseDTO } from "@application/dto/order-response.dto";
 import { UnauthorizedException } from "../exceptions/unauthorized.exception";
 import type { IUserServiceClient } from "../interfaces/user.client.interface";
 import { OrderMapper } from "../mappers/order.mapper";
+import { OrderResponseDTO } from "@application/dto/order-response.dto";
 
 class OrderNotFoundException extends BaseException {
 	constructor(id: string) {
@@ -23,12 +21,11 @@ class OrderNotFoundException extends BaseException {
 	}
 }
 
-@injectable()
 export class UpdateOrderStatus {
 	constructor(
-		@inject(TYPES.OrderRepository) private orderRepo: IOrderRepository,
-		@inject(TYPES.UserServiceClient) private userClient: IUserServiceClient,
-	) {}
+		private orderRepo: IOrderRepository,
+		private userClient: IUserServiceClient,
+	) { }
 
 	async execute(
 		orderId: string,

@@ -8,20 +8,23 @@ async function seed() {
 			{
 				id: "o101",
 				userId: "650b8b8a0f9b8c001c8e4b1a",
-				product: "MacBook Pro",
+				item: "MacBook Pro",
 				quantity: 1,
+				price: 1999.99,
 			},
 			{
 				id: "o102",
 				userId: "650b8b8a0f9b8c001c8e4b1a",
-				product: "Magic Mouse",
+				item: "Magic Mouse",
 				quantity: 2,
+				price: 79.0,
 			},
 			{
 				id: "o201",
 				userId: "650b8b8a0f9b8c001c8e4b1b",
-				product: "Mechanical Keyboard",
+				item: "Mechanical Keyboard",
 				quantity: 1,
+				price: 150.0,
 			},
 		],
 	});

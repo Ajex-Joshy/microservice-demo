@@ -1,12 +1,9 @@
-import { inject, injectable } from "inversify";
-import { TYPES } from "@config/di/types";
 import type { IOrderRepository } from "@domain/repositories/order.repository";
+import { OrderMapper } from "../mappers/order.mapper";
 import { OrderResponseDTO } from "@application/dto/order-response.dto";
-import { OrderMapper } from "@application/mappers/order.mapper";
 
-@injectable()
 export class GetOrderByUser {
-	constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) {}
+	constructor(private repo: IOrderRepository) { }
 
 	async execute(userId: string): Promise<OrderResponseDTO[] | null> {
 		const orders = await this.repo.findByUserId(userId);

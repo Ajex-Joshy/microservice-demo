@@ -1,8 +1,8 @@
-import { BadRequestException } from "@application/exceptions/bad-request.exception";
 import type { NextFunction, Request, Response } from "express";
 import type { ZodSchema } from "zod";
+import { BadRequestException } from "../../../application/exceptions/bad-request.exception";
 
-export const validateRequest = <T>(schema: ZodSchema<T>) => {
+export const validateRequest = <T,>(schema: ZodSchema<T>) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
 
@@ -15,7 +15,6 @@ export const validateRequest = <T>(schema: ZodSchema<T>) => {
       return next(new BadRequestException(JSON.stringify(errors)));
     }
 
-    // overwrite with parsed/typed data
     req.body = result.data;
     next();
   };
