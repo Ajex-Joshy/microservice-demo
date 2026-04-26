@@ -10,7 +10,6 @@ export const serviceConfigs: ServiceConfig[] = [
     timeout: 5000,
     requireAuth: true,
     publicRoutes: ["/register", "/login", "/health"],
-    adminRoutes: ["/"],
   },
   {
     path: "/api/v1/orders/",
@@ -19,6 +18,5 @@ export const serviceConfigs: ServiceConfig[] = [
     name: "order-service",
     requireAuth: true,
     publicRoutes: ["/health"],
-    adminRoutes: ["/status"],
   },
 ];

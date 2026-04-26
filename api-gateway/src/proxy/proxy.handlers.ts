@@ -39,9 +39,13 @@ export class ProxyHandlers {
       proxyReq.setHeader(HEADERS.USER_ROLE, req.user.role);
     }
 
-    // Standard body forwarding
-    // Downstream services will only parse if the client sends the correct Content-Type header
-    fixRequestBody(proxyReq, req);
+    // If we have a parsed body, ensure we forward it as JSON
+    if (req.body && Object.keys(req.body).length > 0) {
+      const bodyData = JSON.stringify(req.body);
+      proxyReq.setHeader("Content-Type", "application/json");
+      proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
+      proxyReq.write(bodyData);
+    }
 
     logger.debug(`[Proxy] Forwarding to ${req.originalUrl}`, {
       userId: req.user?.userId,

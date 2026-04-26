@@ -28,21 +28,12 @@ export class OrderController {
     res.status(201).json({ success: true, data: order });
   };
 
-  getById = async (req: AuthRequest, res: Response) => {
+  getById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const userId = req.user?.userId;
-    const role = req.user?.role;
-
     const order = await this.getOrderByIdUC.execute(id as string);
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
-
-    // Authorization: Must be owner OR Admin
-    if (order.userId !== userId && role !== "ADMIN") {
-      return res.status(403).json({ success: false, message: "Forbidden: You do not own this order" });
-    }
-
     res.status(200).json({ success: true, data: order });
   };
 

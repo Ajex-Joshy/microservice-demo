@@ -22,8 +22,8 @@ const createApp = (): Application => {
   // Request logging
   app.use(requestLoggerMiddleware);
 
-  // Body parsing 
-  app.use(express.json());
+  // Body parsing (Lenient type check for compatibility)
+  app.use(express.json({ type: "*/*" }));
 
   // Initialize Proxy Services
   ProxyService.setupProxy(app);
