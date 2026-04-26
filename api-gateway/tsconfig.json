@@ -33,6 +33,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@proxy/*": ["src/proxy/*"],
       "@middlewares/*": ["src/middlewares/*"],
