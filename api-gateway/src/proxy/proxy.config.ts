@@ -8,11 +8,14 @@ export const serviceConfigs: ServiceConfig[] = [
     pathRewrite: { "^/": "/api/v1/users" },
     name: "auth-service",
     timeout: 5000,
+    requireAuth: true,
+    publicRoutes: ["/register", "/login"],
   },
   {
     path: "/api/v1/orders/",
     url: ENV.ORDER_SERVICE_URL,
     pathRewrite: { "^/": "/api/v1/orders" },
     name: "order-service",
+    requireAuth: true,
   },
 ];

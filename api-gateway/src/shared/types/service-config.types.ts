@@ -4,4 +4,6 @@ export interface ServiceConfig {
   pathRewrite: Record<string, string>;
   name: string;
   timeout?: number;
+  requireAuth?: boolean;
+  publicRoutes?: string[]; // Routes that DON'T need auth even if requireAuth is true
 }

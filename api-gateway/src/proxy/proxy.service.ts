@@ -8,6 +8,8 @@ import { ProxyOptions } from "@shared/types/proxy-options.types.js";
 import { ProxyErrorResponse } from "@shared/types/proxy-error-response.types.js";
 import { serviceConfigs } from "./proxy.config.js";
 
+import { authMiddleware } from "@middlewares/auth.middleware.js";
+
 export class ProxyService {
   private static createProxyOptions(service: ServiceConfig): ProxyOptions {
     return {
@@ -39,10 +41,11 @@ export class ProxyService {
   }
 
   private static handleProxyRequest(proxyReq: any, req: any): void {
-    // Standardize user context propagation
+    // Forward user context from Gateway to microservices
     if (req.user) {
       proxyReq.setHeader("x-user-id", req.user.userId);
       proxyReq.setHeader("x-user-role", req.user.role);
+      logger.debug(`Forwarding user context: ID=${req.user.userId}, Role=${req.user.role}`);
     }
   }
 
@@ -57,9 +60,26 @@ export class ProxyService {
   public static setupProxy(app: Application): void {
     serviceConfigs.forEach((service) => {
       const proxyOptions = ProxyService.createProxyOptions(service);
-      app.use(service.path, createProxyMiddleware(proxyOptions as any));
+      
+      const middlewares: any[] = [];
+
+      if (service.requireAuth) {
+        middlewares.push((req: any, res: any, next: any) => {
+          // Check if the current sub-path is in publicRoutes
+          const isPublic = service.publicRoutes?.some(p => req.path.startsWith(p));
+          if (isPublic) {
+            return next();
+          }
+          return authMiddleware(req, res, next);
+        });
+      }
+
+      middlewares.push(createProxyMiddleware(proxyOptions as any));
+      
+      app.use(service.path, ...middlewares);
+      
       logger.info(
-        `Configured proxy for: ${service.name} at ${service.path} -> ${service.url}`,
+        `Configured proxy for: ${service.name} at ${service.path} -> ${service.url} (Auth: ${!!service.requireAuth})`,
       );
     });
   }
