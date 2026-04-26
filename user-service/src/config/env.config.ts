@@ -1,4 +1,3 @@
-import { logger } from "@shared/logger/logger";
 import { config } from "dotenv";
 import z from "zod";
 
@@ -16,7 +15,7 @@ const schema = z.object({
 const parsed = schema.safeParse(process.env);
 
 if (!parsed.success) {
-  logger.error(parsed.error.format());
+  console.error(parsed.error.format());
 
   process.exit(1);
 }

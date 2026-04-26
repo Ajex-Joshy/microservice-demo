@@ -13,3 +13,12 @@ export const disconnectDB = async () => {
   await prisma.$disconnect();
   await pool.end();
 };
+
+export const checkHealth = async (): Promise<boolean> => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

@@ -5,7 +5,6 @@ import { HTTP_STATUS } from "@utils/http-status";
 import { rateLimiter } from "@middlewares/rate-limiter.middleware";
 import { requestLoggerMiddleware } from "@middlewares/request-logger.middleware";
 import { errorMiddleware } from "@middlewares/error.middleware";
-import { contextMiddleware } from "@middlewares/context.middleware";
 import routes from "@routes/index";
 import { ProxyService } from "@proxy/proxy.service";
 import logger from "@config/logger.config";
@@ -17,22 +16,21 @@ const createApp = (): Application => {
   app.use(helmet());
   app.use(cors());
 
-  // Context & Tracing
-  app.use(contextMiddleware);
-
   // Rate limiting
   app.use(rateLimiter);
 
   // Request logging
   app.use(requestLoggerMiddleware);
 
+  // Initialize Proxy Services BEFORE body parsing
+  // Proxied requests need the raw body stream — express.json() would consume it
+  ProxyService.setupProxy(app);
+
+  // Body parsing only for gateway's own routes (health, etc.)
   app.use(express.json());
 
   // Application routes (Health checks, etc.)
   app.use(routes);
-
-  // Initialize Proxy Services (Downstream routes)
-  ProxyService.setupProxy(app);
 
   // 404 handler
   app.use((req: Request, res: Response) => {

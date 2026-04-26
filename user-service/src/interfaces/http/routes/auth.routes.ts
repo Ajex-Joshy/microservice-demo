@@ -1,3 +1,4 @@
+import { checkHealth } from "@infrastructure/db/mongo";
 import { TYPES } from "@config/di/types";
 import type { AuthController } from "@interfaces/http/controllers/auth.controller";
 import type { AuthMiddleware } from "@interfaces/http/middlewares/auth.middlware";
@@ -22,19 +23,23 @@ export class AuthRoutes {
   }
 
   private init() {
+    this.router.get("/health", async (req, res) => {
+      const isHealthy = await checkHealth();
+      res.json({ status: isHealthy ? "ok" : "error", database: isHealthy ? "connected" : "disconnected" });
+    });
     this.router.post(
-      "/auth/register",
+      "/register",
       validateRequest(RegisterSchema),
       this.controller.registerUser,
     );
 
     this.router.post(
-      "/auth/login",
+      "/login",
       validateRequest(LoginSchema),
       this.controller.loginUser,
     );
 
-    this.router.get("/auth/me", this.auth.handle, this.controller.me);
+    this.router.get("/me", this.auth.handle, this.controller.me);
 
     this.router.get(
       "/users/:id",

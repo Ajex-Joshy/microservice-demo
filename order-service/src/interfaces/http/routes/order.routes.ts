@@ -6,6 +6,8 @@ import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { validateRequest } from "../middlewares/validation.middleware";
 import { createOrderSchema, updateOrderStatusSchema } from "../validators/order.validators";
 
+import { checkHealth } from "@infrastructure/db/prisma/prisma.client";
+
 @injectable()
 export class OrderRoutes {
   public router: Router;
@@ -19,6 +21,11 @@ export class OrderRoutes {
   }
 
   private setupRoutes() {
+    this.router.get("/health", async (req, res) => {
+      const isHealthy = await checkHealth();
+      res.json({ status: isHealthy ? "ok" : "error", database: isHealthy ? "connected" : "disconnected" });
+    });
+
     this.router.post(
       "/orders",
       this.authMiddleware.handle,

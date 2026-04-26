@@ -60,6 +60,27 @@ services:
     networks:
       - app-network
 
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - AUTH_JWT_SECRET=JESUSILOVEYOU
+      - USER_SERVICE_URL=http://user-service:5001
+      - ORDER_SERVICE_URL=http://order-service:3001
+      - RATE_LIMIT_WINDOW=15
+      - RATE_LIMIT_MAX_REQUESTS=100
+    depends_on:
+      - user-service
+      - order-service
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

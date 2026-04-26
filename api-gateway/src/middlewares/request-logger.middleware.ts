@@ -7,12 +7,9 @@ export const requestLoggerMiddleware = (
   next: NextFunction,
 ) => {
   const start = Date.now();
-  const correlationId = (req as any).correlationId;
-
   res.on("finish", () => {
     const duration = Date.now() - start;
     logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`, {
-      correlationId,
       method: req.method,
       url: req.originalUrl,
       status: res.statusCode,

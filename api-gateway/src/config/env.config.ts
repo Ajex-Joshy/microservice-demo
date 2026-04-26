@@ -19,7 +19,7 @@ const envSchema = z.object({
   SERVICE_NAME: z.string().default(pkg.name),
 
   USER_SERVICE_URL: z.string().default("http://localhost:3001"),
-  ORDER_SERVICE_URL: z.string().default("http://localhost:30002"),
+  ORDER_SERVICE_URL: z.string().default("http://localhost:3002"),
 });
 
 const parsed = envSchema.safeParse(process.env);

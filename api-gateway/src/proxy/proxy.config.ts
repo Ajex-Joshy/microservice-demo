@@ -5,17 +5,18 @@ export const serviceConfigs: ServiceConfig[] = [
   {
     path: "/api/v1/users/",
     url: ENV.USER_SERVICE_URL,
-    pathRewrite: { "^/": "/api/v1/users" },
+    pathRewrite: { "^/api/v1/users": "" },
     name: "auth-service",
     timeout: 5000,
     requireAuth: true,
-    publicRoutes: ["/register", "/login"],
+    publicRoutes: ["/register", "/login", "/health"],
   },
   {
     path: "/api/v1/orders/",
     url: ENV.ORDER_SERVICE_URL,
-    pathRewrite: { "^/": "/api/v1/orders" },
+    pathRewrite: { "^/api/v1/orders": "" },
     name: "order-service",
     requireAuth: true,
+    publicRoutes: ["/health"],
   },
 ];

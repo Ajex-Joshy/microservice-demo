@@ -1,8 +1,8 @@
 import { Application, Request, Response, NextFunction } from "express";
-import logger from "@config/logger.config.js";
-import { serviceConfigs } from "./proxy.config.js";
-import { ProxyFactory } from "./proxy.factory.js";
-import { authMiddleware } from "@middlewares/auth.middleware.js";
+import logger from "@config/logger.config";
+import { serviceConfigs } from "./proxy.config";
+import { ProxyFactory } from "./proxy.factory";
+import { authMiddleware } from "@middlewares/auth.middleware";
 
 /**
  * ProxyService orchestrates the registration of all API proxies.
@@ -14,11 +14,11 @@ export class ProxyService {
 
       const pipeline: any[] = [];
 
-      // authentication check per service
+      // Authentication check per service
       if (service.requireAuth) {
         pipeline.push((req: Request, res: Response, next: NextFunction) => {
-          const isPublic = service.publicRoutes?.some((p) =>
-            req.path.startsWith(p),
+          const isPublic = service.publicRoutes?.some((route) =>
+            req.path.startsWith(route),
           );
           if (isPublic) {
             return next();

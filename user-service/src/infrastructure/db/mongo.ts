@@ -26,3 +26,7 @@ export const disconnectDB = async (): Promise<void> => {
     throw error;
   }
 };
+
+export const checkHealth = async (): Promise<boolean> => {
+  return mongoose.connection.readyState === 1;
+};
