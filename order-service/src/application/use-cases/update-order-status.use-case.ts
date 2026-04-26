@@ -1,27 +1,12 @@
 import type { IOrderRepository } from "@domain/repositories/order.repository";
 import type { OrderStatus } from "@domain/value-objects/order-status.vo";
-import { status } from "@grpc/grpc-js";
-import { HTTP_STATUS } from "@shared/constants/http-status.constants";
-import { BaseException } from "@shared/exceptions/BaseException";
 import { UnauthorizedException } from "../exceptions/unauthorized.exception";
 import type { IUserServiceClient } from "../interfaces/user.client.interface";
 import { OrderResponseDTO } from "@application/dto/order-response.dto";
 import { OrderMapper } from "@application/mappers/order.mapper";
 import { inject, injectable } from "inversify";
 import { TYPES } from "@config/di/types";
-
-class OrderNotFoundException extends BaseException {
-  constructor(id: string) {
-    super(
-      `Order with id ${id} not found`,
-      "ORDER_NOT_FOUND",
-      HTTP_STATUS.NOT_FOUND,
-      status.NOT_FOUND,
-      false,
-    );
-    Object.setPrototypeOf(this, OrderNotFoundException.prototype);
-  }
-}
+import { OrderNotFoundException } from "@application/exceptions/order-not-found.exceptions";
 
 @injectable()
 export class UpdateOrderStatus {
