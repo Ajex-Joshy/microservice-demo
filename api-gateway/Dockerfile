@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml tsconfig.json ./
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Copy source code
 COPY . .
@@ -27,7 +27,7 @@ FROM base AS prod-deps
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod
 
 # Stage 3: Final Production Image
 FROM node:22-alpine AS runner
@@ -56,4 +56,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
 
 # Start the application
-CMD ["node", "dist/src/main.js"]
+CMD ["npx", "tsx", "dist/src/main.js"]

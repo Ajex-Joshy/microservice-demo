@@ -27,26 +27,26 @@ export class OrderRoutes {
     });
 
     this.router.post(
-      "/orders",
+      "/",
       this.authMiddleware.handle,
       validateRequest(createOrderSchema),
       this.controller.create
     );
 
     this.router.get(
-      "/orders/my",
+      "/my",
       this.authMiddleware.handle,
       this.controller.getByUser
     );
 
     this.router.get(
-      "/orders/:id",
+      "/:id",
       this.authMiddleware.handle,
       this.controller.getById
     );
 
     this.router.patch(
-      "/orders/:id/status",
+      "/:id/status",
       this.authMiddleware.handle,
       validateRequest(updateOrderStatusSchema),
       this.controller.updateStatus

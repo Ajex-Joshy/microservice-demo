@@ -42,7 +42,7 @@ export class AuthRoutes {
     this.router.get("/me", this.auth.handle, this.controller.me);
 
     this.router.get(
-      "/users/:id",
+      "/:id",
       this.auth.handle,
       this.role.handle("USER"),
       this.controller.getUserById,
