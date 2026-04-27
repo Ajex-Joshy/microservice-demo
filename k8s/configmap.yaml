@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grpc-project-config
+data:
+  NODE_ENV: "production"
+  JWT_EXPIRY: "24h"
+  
+  # API Gateway
+  GATEWAY_PORT: "3000"
+  USER_SERVICE_URL: "http://user-service:5001"
+  ORDER_SERVICE_URL: "http://order-service:3001"
+
+  # User Service
+  USER_SERVICE_PORT: "5001"
+  USER_SERVICE_GRPC_PORT: "5052"
+
+  # Order Service
+  ORDER_SERVICE_PORT: "3001"
+  ORDER_USER_SERVICE_GRPC_URL: "user-service:5052"

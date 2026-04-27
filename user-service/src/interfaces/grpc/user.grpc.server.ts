@@ -28,8 +28,11 @@ export const startGrpcServer = async () => {
   const PORT = ENV.GRPC_PORT;
 
   return new Promise<void>((resolve, reject) => {
+    const bindAddr = PORT.includes(":") ? PORT : `0.0.0.0:${PORT}`;
+    console.log(`[DEBUG] GPRC_PORT value: "${PORT}"`);
+    console.log(`[DEBUG] Final gRPC Bind Address: "${bindAddr}"`);
     server.bindAsync(
-      PORT,
+      bindAddr,
       grpc.ServerCredentials.createInsecure(),
       (err, port) => {
         if (err) {
