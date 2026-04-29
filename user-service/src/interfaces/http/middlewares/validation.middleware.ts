@@ -12,7 +12,7 @@ export const validateRequest = <T,>(schema: ZodSchema<T>) => {
         message: i.message,
       }));
 
-      return next(new BadRequestException(JSON.stringify(errors)));
+      return next(new BadRequestException("Validation failed", errors));
     }
 
     req.body = result.data;

@@ -2,12 +2,17 @@ import { z } from "zod";
 
 export const RegisterSchema = z.object({
   name: z
-    .string()
-    .min(3, "Name should be atleast 2 letters")
-    .max(25, "Name cannot exceed more than 25 letters"),
-  email: z.string().email("Invalid email"),
+    .string({ message: "Name is required" })
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name cannot exceed 50 characters"),
+  email: z
+    .string({ message: "Email is required" })
+    .trim()
+    .email("Invalid email address")
+    .toLowerCase(),
   password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .max(64, "Password too long"),
+    .string({ message: "Password is required" })
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password is too long"),
 });

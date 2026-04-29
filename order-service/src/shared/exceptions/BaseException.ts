@@ -6,6 +6,7 @@ export abstract class BaseException extends Error {
 		public readonly code: string,
 		public readonly httpStatus: number = 500,
 		public readonly grpcStatus: status = status.INTERNAL,
+		public readonly details?: any,
 		public readonly isOperational: boolean = true,
 	) {
 		super(message);

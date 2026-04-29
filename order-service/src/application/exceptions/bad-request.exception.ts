@@ -3,13 +3,13 @@ import { HTTP_STATUS } from "@shared/constants/http-status.constants";
 import { BaseException } from "@shared/exceptions/BaseException";
 
 export class BadRequestException extends BaseException {
-	constructor(message: string) {
+	constructor(message: string = "Bad Request", details?: any) {
 		super(
 			message,
 			"BAD_REQUEST",
 			HTTP_STATUS.BAD_REQUEST,
 			status.INVALID_ARGUMENT,
-			false,
+			details,
 		);
 		Object.setPrototypeOf(this, BadRequestException.prototype);
 	}

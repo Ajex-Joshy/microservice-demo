@@ -36,5 +36,6 @@ export const errorHandler = (
 		success: false,
 		message: isServerError ? "Internal Server Error" : err.message,
 		code: err.code || "UNKNOWN_ERROR",
+		details: err.details || undefined,
 	});
 };

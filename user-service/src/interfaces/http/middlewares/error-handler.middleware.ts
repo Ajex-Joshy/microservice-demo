@@ -33,10 +33,11 @@ export const errorHandler = (
     );
   }
 
-  // 🧼 CLIENT RESPONSE (SANITIZED)
+  //  CLIENT RESPONSE (SANITIZED)
   res.status(status).json({
     success: false,
     message: isServerError ? "Internal Server Error" : err.message,
     code: err.code || "UNKNOWN_ERROR",
+    details: err.details || undefined,
   });
 };
