@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   # 1. Parallel Build and Push using Matrix Strategy
@@ -32,7 +33,8 @@ jobs:
           context: .
           file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
+          # Use branch name as the tag (e.g., :main or :develop)
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:${{ github.ref_name }}
           # Ensure fresh cache to avoid build issues
           no-cache: true
 
