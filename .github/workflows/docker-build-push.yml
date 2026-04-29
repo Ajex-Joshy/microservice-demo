@@ -1,13 +1,18 @@
-name: Build and Push Docker Images
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
+  # 1. Parallel Build and Push using Matrix Strategy
   build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [api-gateway, user-service, order-service]
     
     steps:
       - name: Checkout Code
@@ -22,18 +27,67 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push User Service
+      - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./user-service/Dockerfile
+          context: ./${{ matrix.service }}
+          file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+          # Use branch name as the tag (e.g., :main or :develop)
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:${{ github.ref_name }}
+          # Ensure fresh cache to avoid build issues
+          no-cache: true
 
-      - name: Build and Push Order Service
-        uses: docker/build-push-action@v5
+  # 2. Automated Deployment to Kubernetes
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          context: .
-          file: ./order-service/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/order-service:latest
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Update Kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ap-south-1 --name grpc-cluster
+
+      - name: Create Kubernetes Secret
+        run: |
+          kubectl create secret generic grpc-project-secrets \
+            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            --from-literal=MONGODB_URI="${{ secrets.MONGODB_URI }}" \
+            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            --dry-run=client -o yaml | kubectl apply -f - --validate=false
+
+      - name: Update Image Tags in Manifests
+        run: |
+          sed -i "s|image: ${{ secrets.DOCKER_USERNAME }}/\(.*\):latest|image: ${{ secrets.DOCKER_USERNAME }}/\1:${{ github.ref_name }}|g" k8s/*.yaml
+
+      - name: Apply Kubernetes Manifests
+        run: |
+          kubectl apply -f k8s/configmap.yaml --validate=false
+          kubectl apply -f k8s/databases.yaml --validate=false
+          kubectl apply -f k8s/user-service.yaml --validate=false
+          kubectl apply -f k8s/order-service.yaml --validate=false
+          kubectl apply -f k8s/api-gateway.yaml --validate=false
+          
+      - name: Wait for Rollout
+        run: |
+          kubectl rollout status deployment/user-service
+          kubectl rollout status deployment/order-service
+          kubectl rollout status deployment/api-gateway
+
+      # 3. Rollback Step: Runs only if any of the above steps fail
+      - name: Rollback on Failure
+        if: failure()
+        run: |
+          echo "Deployment failed! Rolling back to previous version..."
+          kubectl rollout undo deployment/user-service
+          kubectl rollout undo deployment/order-service
+          kubectl rollout undo deployment/api-gateway

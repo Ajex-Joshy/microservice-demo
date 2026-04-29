@@ -1,8 +1,8 @@
+import { TYPES } from "@config/di/types";
+import type { User } from "@domain/entities/user.entity";
+import { UserNotFoundException } from "@domain/exceptions/UserNotFound.exception";
+import type { IUserRepository } from "@domain/repositories/user.repository.interface";
 import { inject, injectable } from "inversify";
-import type { User } from "../../domain/entities/user.entity";
-import { UserNotFoundException } from "../../domain/exceptions/UserNotFound.exception";
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface";
-import { TYPES } from "../../config/di/types";
 
 @injectable()
 export class GetUserById {

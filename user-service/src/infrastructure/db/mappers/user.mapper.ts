@@ -1,4 +1,4 @@
-import { User, UserRole } from "../../../domain/entities/user.entity";
+import { User, UserRole } from "@domain/entities/user.entity";
 
 export const mapToDomain = (data: Record<string, unknown>): User => {
   return new User(

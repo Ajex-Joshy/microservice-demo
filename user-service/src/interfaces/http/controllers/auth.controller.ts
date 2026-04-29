@@ -1,13 +1,13 @@
+import { UserResponseDTO } from "@application/dto/UserResponse.dto";
+import type { GetUserById } from "@application/use-cases/get-user-by-id.use-case";
+import type { LoginUser } from "@application/use-cases/login-user.use-case";
+import type { RegisterUser } from "@application/use-cases/register-user.use-case";
+import { TYPES } from "@config/di/types";
+import { UserNotFoundException } from "@domain/exceptions/UserNotFound.exception";
+import type { JwtService } from "@infrastructure/auth/jwt.service";
+import { HTTP_STATUS } from "@shared/constants/http-status.constants";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { UserResponseDTO } from "../../../application/dto/UserResponse.dto";
-import type { GetUserById } from "../../../application/use-cases/get-user-by-id.use-case";
-import type { LoginUser } from "../../../application/use-cases/login-user.use-case";
-import type { RegisterUser } from "../../../application/use-cases/register-user.use-case";
-import { UserNotFoundException } from "../../../domain/exceptions/UserNotFound.exception";
-import type { JwtService } from "../../../infrastructure/auth/jwt.service";
-import { HTTP_STATUS } from "../../../shared/constants/http-status.constants";
-import { TYPES } from "../../../config/di/types";
 
 @injectable()
 export class AuthController {
@@ -25,6 +25,7 @@ export class AuthController {
         req.body.name,
         req.body.email,
         req.body.password,
+        req.body.role,
       );
 
       // never return password

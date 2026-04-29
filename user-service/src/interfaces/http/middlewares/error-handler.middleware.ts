@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { logger } from "../../../shared/logger/logger";
+import { logger } from "@shared/logger/logger";
+import type { NextFunction, Request, Response } from "express";
 
 export const errorHandler = (
   err: any,
@@ -33,10 +33,11 @@ export const errorHandler = (
     );
   }
 
-  // 🧼 CLIENT RESPONSE (SANITIZED)
+  //  CLIENT RESPONSE (SANITIZED)
   res.status(status).json({
     success: false,
     message: isServerError ? "Internal Server Error" : err.message,
     code: err.code || "UNKNOWN_ERROR",
+    details: err.details || undefined,
   });
 };

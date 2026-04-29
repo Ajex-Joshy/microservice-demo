@@ -1,5 +1,9 @@
 export type OrderResponseDTO = {
-  id: string;
-  product: string;
-  quantity: number;
+	id: string;
+	userId: string;
+	item: string;
+	quantity: number;
+	price: number;
+	status: string;
+	createdAt: Date;
 };

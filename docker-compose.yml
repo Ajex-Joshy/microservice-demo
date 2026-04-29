@@ -6,45 +6,84 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - app-network
 
   postgres:
     image: postgres:16
     container_name: postgres
-    restart: always
     environment:
-      POSTGRES_USER: ajexjoshy
+      POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: postgres
+      POSTGRES_DB: order_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   user-service:
     build:
-      context: .
-      dockerfile: user-service/Dockerfile
+      context: ./user-service
+      dockerfile: Dockerfile
     container_name: user-service
     ports:
-      - "50051:50051"
+      - "5001:5001"   # HTTP
+      - "5052:5052"   # gRPC
     environment:
       - MONGO_URI=mongodb://mongodb:27017/user-service
-      - ORDER_SERVICE_URL=order-service:50052
+      - PORT=5001
+      - GRPC_PORT=0.0.0.0:5052
+      - JWT_SECRET=JESUSILOVEYOU
+      - JWT_EXPIRY=1d
     depends_on:
       - mongodb
-      - order-service
+    networks:
+      - app-network
 
   order-service:
     build:
-      context: .
-      dockerfile: order-service/Dockerfile
+      context: ./order-service
+      dockerfile: Dockerfile
     container_name: order-service
     ports:
-      - "50052:50052"
+      - "3001:3001"   # HTTP
     environment:
-      - DATABASE_URL=postgresql://ajexjoshy:password@postgres:5432/postgres?schema=public
+      - DATABASE_URL=postgresql://user:password@postgres:5432/order_db?schema=public
+      - USER_SERVICE_URL=user-service:5052
+      - JWT_SECRET=JESUSILOVEYOU
+      - PORT=3001
     depends_on:
       - postgres
+      - user-service
+    networks:
+      - app-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - AUTH_JWT_SECRET=JESUSILOVEYOU
+      - USER_SERVICE_URL=http://user-service:5001
+      - ORDER_SERVICE_URL=http://order-service:3001
+      - RATE_LIMIT_WINDOW=15
+      - RATE_LIMIT_MAX_REQUESTS=100
+    depends_on:
+      - user-service
+      - order-service
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   mongodb_data:

@@ -9,6 +9,7 @@ const schema = z.object({
   JWT_SECRET: z.string().min(10),
   JWT_EXPIRY: z.string().regex(/^\d+(s|m|h|d)$/, "Invalid JWT expiry format"),
   NODE_ENV: z.string().default("development"),
+  GRPC_PORT: z.string(),
 });
 
 const parsed = schema.safeParse(process.env);

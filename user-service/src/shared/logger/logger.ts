@@ -1,8 +1,13 @@
+import { ENV } from "@config/env.config";
 import pino from "pino";
-import { ENV } from "../../config/env.config";
+import { getCorrelationId } from "../tracing/tracing-context";
 
 export const logger = pino({
   level: ENV.NODE_ENV === "production" ? "info" : "debug",
+  mixin() {
+    const correlationId = getCorrelationId();
+    return correlationId ? { correlationId } : {};
+  },
   ...(ENV.NODE_ENV !== "production"
     ? {
         transport: {

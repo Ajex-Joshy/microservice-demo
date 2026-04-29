@@ -1,3 +1,5 @@
+import { symbol } from "zod";
+
 export const TYPES = {
   // infra
   UserRepository: Symbol.for("UserRepository"),
@@ -18,4 +20,7 @@ export const TYPES = {
 
   // routes
   AuthRoutes: Symbol.for("AuthRoutes"),
+
+  // gRPC controllers
+  UserGrpcController: Symbol.for("UserGrpcController"),
 };

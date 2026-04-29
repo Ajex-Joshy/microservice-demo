@@ -1,47 +1,43 @@
-# ---------- 1. BASE ----------
-FROM node:22-alpine AS base
+# Stage 1: Build
+FROM node:22-alpine AS builder
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+RUN apk add --no-cache libc6-compat openssl
 
-RUN corepack enable
+RUN npm install -g pnpm
 
 WORKDIR /app
 
-# ---------- 2. DEPENDENCIES ----------
-FROM base AS deps
-
 COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --no-ignore-scripts
 
-RUN pnpm install --frozen-lockfile
+# Copy proto files (Assume relative to build context)
+COPY proto ./proto
 
-# ---------- 3. BUILD ----------
-FROM base AS builder
-
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN pnpm build
+RUN pnpm run build
 
-# ---------- 4. PRODUCTION ----------
+# Stage 2: Production
 FROM node:22-alpine AS runner
+
+RUN apk add --no-cache openssl
+
+WORKDIR /app
 
 ENV NODE_ENV=production
 
-WORKDIR /app
+RUN npm install -g pnpm
 
-# only copy required files
 COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile --no-ignore-scripts
 
-RUN corepack enable && pnpm install --prod --frozen-lockfile
-
-# copy built files
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/proto ./proto
 
-# security: non-root user
-RUN addgroup -S app && adduser -S app -G app
-USER app
+RUN addgroup -S usergroup && adduser -S useruser -G usergroup
+USER useruser
 
-EXPOSE 3000
+EXPOSE 5001
+EXPOSE 5052
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]

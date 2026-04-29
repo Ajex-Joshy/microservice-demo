@@ -1,5 +1,5 @@
+import { logger } from "@shared/logger/logger";
 import pinoHttp from "pino-http";
-import { logger } from "./logger";
 
 export const httpLogger = pinoHttp({
   logger,

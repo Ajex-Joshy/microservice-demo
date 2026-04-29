@@ -12,8 +12,18 @@ datasource db {
 }
 
 model Order {
-  id       String @id @default(uuid())
-  userId   String
-  product  String
-  quantity Int
+  id        String      @id @default(uuid())
+  userId    String
+  item      String
+  quantity  Int
+  price     Float
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
 }

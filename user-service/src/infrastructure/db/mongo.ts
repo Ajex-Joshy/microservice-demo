@@ -1,7 +1,7 @@
+import { ENV } from "@config/env.config";
+import { DatabaseException } from "@infrastructure/exceptions/Database.exception";
+import { logger } from "@shared/logger/logger";
 import mongoose from "mongoose";
-import { ENV } from "../../config/env.config";
-import { DatabaseException } from "../exceptions/Database.exception";
-import { logger } from "../../shared/logger/logger";
 
 export const connectDB = async (): Promise<void> => {
   try {
@@ -25,4 +25,8 @@ export const disconnectDB = async (): Promise<void> => {
     logger.error(error, "MongoDB disconnection error:");
     throw error;
   }
+};
+
+export const checkHealth = async (): Promise<boolean> => {
+  return mongoose.connection.readyState === 1;
 };

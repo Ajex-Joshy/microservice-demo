@@ -1,9 +1,13 @@
+import { checkHealth } from "@infrastructure/db/mongo";
+import { TYPES } from "@config/di/types";
+import type { AuthController } from "@interfaces/http/controllers/auth.controller";
+import type { AuthMiddleware } from "@interfaces/http/middlewares/auth.middlware";
+import type { RoleMiddleware } from "@interfaces/http/middlewares/role.middleware";
 import { Router } from "express";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../../config/di/types";
-import type { AuthController } from "../controllers/auth.controller";
-import type { AuthMiddleware } from "../middlewares/auth.middlware";
-import type { RoleMiddleware } from "../middlewares/role.middleware";
+import { validateRequest } from "../middlewares/validation.middleware";
+import { LoginSchema } from "../validators/login.schema";
+import { RegisterSchema } from "../validators/register.schema";
 
 @injectable()
 export class AuthRoutes {
@@ -19,14 +23,26 @@ export class AuthRoutes {
   }
 
   private init() {
-    this.router.post("/auth/register", this.controller.registerUser);
+    this.router.get("/health", async (req, res) => {
+      const isHealthy = await checkHealth();
+      res.json({ status: isHealthy ? "ok" : "error", database: isHealthy ? "connected" : "disconnected" });
+    });
+    this.router.post(
+      "/register",
+      validateRequest(RegisterSchema),
+      this.controller.registerUser,
+    );
 
-    this.router.post("/auth/login", this.controller.loginUser);
+    this.router.post(
+      "/login",
+      validateRequest(LoginSchema),
+      this.controller.loginUser,
+    );
 
-    this.router.get("/auth/me", this.auth.handle, this.controller.me);
+    this.router.get("/me", this.auth.handle, this.controller.me);
 
     this.router.get(
-      "/users/:id",
+      "/:id",
       this.auth.handle,
       this.role.handle("USER"),
       this.controller.getUserById,
