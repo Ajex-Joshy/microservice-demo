@@ -55,7 +55,7 @@ jobs:
 
       - name: Update Kubeconfig
         run: |
-          aws eks update-kubeconfig --region ap-south-1 --name grpc-project-cluster
+          aws eks update-kubeconfig --region ap-south-1 --name grpc-cluster
 
       - name: Apply Kubernetes Manifests
         run: |
