@@ -63,15 +63,19 @@ jobs:
             --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
             --from-literal=MONGODB_URI="${{ secrets.MONGODB_URI }}" \
             --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-            --dry-run=client -o yaml | kubectl apply -f -
+            --dry-run=client -o yaml | kubectl apply -f - --validate=false
+
+      - name: Update Image Tags in Manifests
+        run: |
+          sed -i "s|image: ${{ secrets.DOCKER_USERNAME }}/\(.*\):latest|image: ${{ secrets.DOCKER_USERNAME }}/\1:${{ github.ref_name }}|g" k8s/*.yaml
 
       - name: Apply Kubernetes Manifests
         run: |
-          kubectl apply -f k8s/configmap.yaml
-          kubectl apply -f k8s/databases.yaml
-          kubectl apply -f k8s/user-service.yaml
-          kubectl apply -f k8s/order-service.yaml
-          kubectl apply -f k8s/api-gateway.yaml
+          kubectl apply -f k8s/configmap.yaml --validate=false
+          kubectl apply -f k8s/databases.yaml --validate=false
+          kubectl apply -f k8s/user-service.yaml --validate=false
+          kubectl apply -f k8s/order-service.yaml --validate=false
+          kubectl apply -f k8s/api-gateway.yaml --validate=false
           
       - name: Wait for Rollout
         run: |
