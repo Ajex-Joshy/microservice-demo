@@ -70,7 +70,7 @@ spec:
   selector:
     app: api-gateway
   ports:
-  - port: 3000
+  - port: 80
     targetPort: 3000
   # Note: Use 'type: LoadBalancer' in cloud environments (AWS, GCP, Azure)
   # or use an Ingress Controller for production.
