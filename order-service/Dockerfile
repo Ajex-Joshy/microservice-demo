@@ -13,7 +13,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # Install all dependencies (including devDependencies for the build step)
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --no-ignore-scripts
 
 COPY prisma ./prisma/
 COPY prisma.config.ts ./
@@ -37,7 +37,7 @@ RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod --frozen-lockfile --no-ignore-scripts
 
 # Copy built artifacts from the builder stage
 COPY --from=builder /app/dist ./dist

@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { randomUUID } from "crypto";
-import { tracingStorage } from "../../shared/tracing/tracing-context";
+import { tracingStorage } from "../../../shared/tracing/tracing-context";
 
 export const CORRELATION_HEADER = "x-correlation-id";
 

@@ -8,7 +8,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --no-ignore-scripts
 
 # Copy proto files (Assume relative to build context)
 COPY proto ./proto
@@ -29,7 +29,7 @@ ENV NODE_ENV=production
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod --frozen-lockfile --no-ignore-scripts
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/proto ./proto

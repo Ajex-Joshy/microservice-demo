@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml tsconfig.json ./
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --no-ignore-scripts
 
 # Copy source code
 COPY . .
@@ -27,7 +27,7 @@ FROM base AS prod-deps
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod
+RUN pnpm install --prod --no-ignore-scripts
 
 # Stage 3: Final Production Image
 FROM node:22-alpine AS runner
