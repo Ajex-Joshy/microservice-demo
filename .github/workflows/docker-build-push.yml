@@ -83,6 +83,29 @@ jobs:
           kubectl rollout status deployment/order-service
           kubectl rollout status deployment/api-gateway
 
+      - name: Verify Public Health Check
+        run: |
+          echo "Waiting for LoadBalancer to be ready..."
+          ATTEMPTS=0
+          MAX_ATTEMPTS=20
+          while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
+            LB_URL=$(kubectl get svc api-gateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            if [ ! -z "$LB_URL" ]; then
+              echo "LoadBalancer URL: http://$LB_URL/health"
+              # Try to curl the health endpoint
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$LB_URL/health || echo "000")
+              if [ "$STATUS" == "200" ]; then
+                echo "✅ Health check passed!"
+                exit 0
+              fi
+            fi
+            echo "Waiting for LoadBalancer and service to respond (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)..."
+            sleep 30
+            ATTEMPTS=$((ATTEMPTS+1))
+          done
+          echo "❌ Health check timed out!"
+          exit 1
+
       # 3. Rollback Step: Runs only if any of the above steps fail
       - name: Rollback on Failure
         if: failure()
