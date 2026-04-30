@@ -6,7 +6,7 @@ import { inject, injectable } from "inversify";
 
 @injectable()
 export class GetOrderByUser {
-	constructor(@inject(TYPES.OrderRepository) _repo: IOrderRepository) {}
+	constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) {}
 
 	async execute(userId: string): Promise<OrderResponseDTO[] | null> {
 		const orders = await this.repo.findByUserId(userId);

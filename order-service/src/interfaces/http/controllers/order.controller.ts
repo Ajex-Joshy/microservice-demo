@@ -10,10 +10,10 @@ import type { AuthRequest } from "../middlewares/auth.middleware";
 @injectable()
 export class OrderController {
 	constructor(
-		@inject(TYPES.CreateOrder) _createOrderUC: CreateOrder,
-		@inject(TYPES.GetOrderById) _getOrderByIdUC: GetOrderById,
-		@inject(TYPES.GetOrderByUser) _getOrderByUserUC: GetOrderByUser,
-		@inject(TYPES.UpdateOrderStatus) _updateOrderStatusUC: UpdateOrderStatus,
+		@inject(TYPES.CreateOrder) private createOrderUC: CreateOrder,
+		@inject(TYPES.GetOrderById) private getOrderByIdUC: GetOrderById,
+		@inject(TYPES.GetOrderByUser) private getOrderByUserUC: GetOrderByUser,
+		@inject(TYPES.UpdateOrderStatus) private updateOrderStatusUC: UpdateOrderStatus,
 	) {}
 
 	create = async (req: AuthRequest, res: Response) => {

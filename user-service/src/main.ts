@@ -15,8 +15,11 @@ import { logger } from "@shared/logger/logger";
 import express from "express";
 import helmet from "helmet";
 
+import { seedAdmin } from "@infrastructure/db/mongodb/seed";
+
 async function bootstrap() {
   await connectDB();
+  await seedAdmin(container);
   await startGrpcServer();
 
   const app = express();

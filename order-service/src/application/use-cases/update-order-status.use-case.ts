@@ -11,8 +11,8 @@ import type { IUserServiceClient } from "../interfaces/user.client.interface";
 @injectable()
 export class UpdateOrderStatus {
 	constructor(
-		@inject(TYPES.OrderRepository) _orderRepo: IOrderRepository,
-		@inject(TYPES.UserServiceClient) _userClient: IUserServiceClient,
+		@inject(TYPES.OrderRepository) private orderRepo: IOrderRepository,
+		@inject(TYPES.UserServiceClient) private userClient: IUserServiceClient,
 	) {}
 
 	async execute(

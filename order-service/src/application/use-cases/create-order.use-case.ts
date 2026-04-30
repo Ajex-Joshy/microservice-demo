@@ -9,7 +9,7 @@ import { inject, injectable } from "inversify";
 
 @injectable()
 export class CreateOrder {
-	constructor(@inject(TYPES.OrderRepository) _repo: IOrderRepository) {}
+	constructor(@inject(TYPES.OrderRepository) private repo: IOrderRepository) {}
 
 	async execute(
 		userId: string,

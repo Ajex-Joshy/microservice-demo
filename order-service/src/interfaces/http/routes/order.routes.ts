@@ -15,8 +15,8 @@ export class OrderRoutes {
 	public router: Router;
 
 	constructor(
-		@inject(TYPES.OrderController) _controller: OrderController,
-		@inject(TYPES.AuthMiddleware) _authMiddleware: AuthMiddleware,
+		@inject(TYPES.OrderController) private controller: OrderController,
+		@inject(TYPES.AuthMiddleware) private authMiddleware: AuthMiddleware,
 	) {
 		this.router = Router();
 		this.setupRoutes();
