@@ -1,6 +1,5 @@
-import rateLimit from "express-rate-limit";
 import { ENV } from "@config/env.config";
-import { HTTP_STATUS } from "@utils/http-status";
+import rateLimit from "express-rate-limit";
 
 export const rateLimiter = rateLimit({
   windowMs: Number(ENV.RATE_LIMIT_WINDOW),

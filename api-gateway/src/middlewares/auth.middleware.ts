@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { ENV } from "@config/env.config";
-import { HTTP_STATUS } from "@utils/http-status";
-import { UserPayload } from "@custom-types/user-context.types";
 import logger from "@config/logger.config";
+import type { UserPayload } from "@custom-types/user-context.types";
+import { HTTP_STATUS } from "@utils/http-status";
+import type { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
 export const authMiddleware = (
   req: Request,
@@ -12,8 +12,10 @@ export const authMiddleware = (
 ) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    logger.warn(`Unauthorized access attempt: No Bearer token provided for ${req.path}`);
+  if (!authHeader?.startsWith("Bearer ")) {
+    logger.warn(
+      `Unauthorized access attempt: No Bearer token provided for ${req.path}`,
+    );
     return res
       .status(HTTP_STATUS.UNAUTHORIZED)
       .json({ message: "Unauthenticated: No token provided" });

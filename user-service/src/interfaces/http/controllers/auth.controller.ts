@@ -8,6 +8,7 @@ import type { JwtService } from "@infrastructure/auth/jwt.service";
 import { HTTP_STATUS } from "@shared/constants/http-status.constants";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
+import type { AuthRequest } from "../middlewares/auth.middlware";
 
 @injectable()
 export class AuthController {
@@ -53,13 +54,14 @@ export class AuthController {
   };
 
   // GET /users/:id
-  getUserById = async (req: Request, res: Response, next: NextFunction) => {
+  getUserById = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-      const userId = Array.isArray(req.params.id)
+      const targetUserId = Array.isArray(req.params.id)
         ? req.params.id[0]
         : req.params.id;
-      const user = await this.getUser.execute(userId);
-      if (!user) throw new UserNotFoundException(userId);
+
+      const user = await this.getUser.execute(targetUserId);
+      if (!user) throw new UserNotFoundException(targetUserId);
 
       const response = new UserResponseDTO(user._id, user?.name, user.email);
 

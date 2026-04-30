@@ -1,13 +1,13 @@
-import { TYPES } from "@config/di/types";
-import { inject, injectable } from "inversify";
 import type { GetUserById } from "@application/use-cases/get-user-by-id.use-case";
+import { TYPES } from "@config/di/types";
 import { UserNotFoundException } from "@domain/exceptions/UserNotFound.exception";
 import * as grpc from "@grpc/grpc-js";
+import { inject, injectable } from "inversify";
 import type { UserServiceHandlers } from "../generated/user/UserService";
 
 @injectable()
 export class UserGrpcController {
-  constructor(@inject(TYPES.GetUserById) private getUserById: GetUserById) { }
+  constructor(@inject(TYPES.GetUserById) private getUserById: GetUserById) {}
 
   GetUser: UserServiceHandlers["GetUser"] = async (call, callback) => {
     try {

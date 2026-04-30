@@ -12,12 +12,12 @@ export const logger = pino({
 	},
 	...(ENV.NODE_ENV !== "production"
 		? {
-			transport: {
-				target: "pino-pretty",
-				options: {
-					colorize: true,
+				transport: {
+					target: "pino-pretty",
+					options: {
+						colorize: true,
+					},
 				},
-			},
-		}
+			}
 		: {}),
 });

@@ -13,17 +13,11 @@ const logFormat = printf(({ level, message, timestamp, ...metadata }) => {
 
 const logger = winston.createLogger({
   level: ENV.LOG_LEVEL || "info",
-  format: combine(
-    timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    json()
-  ),
+  format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),
   defaultMeta: { service: ENV.SERVICE_NAME },
   transports: [
     new winston.transports.Console({
-      format: combine(
-        colorize(),
-        logFormat
-      ),
+      format: combine(colorize(), logFormat),
     }),
   ],
 });

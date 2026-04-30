@@ -1,8 +1,8 @@
-import { Application, Request, Response, NextFunction } from "express";
 import logger from "@config/logger.config";
+import { authMiddleware } from "@middlewares/auth.middleware";
+import type { Application, NextFunction, Request, Response } from "express";
 import { serviceConfigs } from "./proxy.config";
 import { ProxyFactory } from "./proxy.factory";
-import { authMiddleware } from "@middlewares/auth.middleware";
 
 /**
  * ProxyService orchestrates the registration of all API proxies.

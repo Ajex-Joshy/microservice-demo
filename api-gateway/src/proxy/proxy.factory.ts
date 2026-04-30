@@ -1,8 +1,11 @@
-import { createProxyMiddleware, Options as ProxyOptions } from "http-proxy-middleware";
-import { ServiceConfig } from "@custom-types/service-config.types";
-import { ProxyHandlers } from "./proxy.handlers";
 import { ENV } from "@config/env.config";
 import logger from "@config/logger.config";
+import type { ServiceConfig } from "@custom-types/service-config.types";
+import {
+  createProxyMiddleware,
+  type Options as ProxyOptions,
+} from "http-proxy-middleware";
+import { ProxyHandlers } from "./proxy.handlers";
 
 /**
  * Factory for creating configured proxy middleware instances.

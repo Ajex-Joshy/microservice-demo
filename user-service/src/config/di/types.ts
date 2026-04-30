@@ -1,5 +1,3 @@
-import { symbol } from "zod";
-
 export const TYPES = {
   // infra
   UserRepository: Symbol.for("UserRepository"),

@@ -9,8 +9,6 @@ export interface AuthRequest extends Request {
 
 @injectable()
 export class AuthMiddleware {
-  constructor() {}
-
   handle = (req: AuthRequest, _res: Response, next: NextFunction) => {
     const userId = req.headers["x-user-id"] as string;
     const role = (req.headers["x-user-role"] as UserRole) || "USER";

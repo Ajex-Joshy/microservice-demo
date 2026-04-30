@@ -13,11 +13,13 @@ import type { AuthRoutes } from "@interfaces/http/routes/auth.routes";
 import { httpLogger } from "@shared/logger/http.logger";
 import { logger } from "@shared/logger/logger";
 import express from "express";
-import ExpressMongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
+
+import { seedAdmin } from "@infrastructure/db/mongodb/seed";
 
 async function bootstrap() {
   await connectDB();
+  await seedAdmin(container);
   await startGrpcServer();
 
   const app = express();

@@ -1,14 +1,18 @@
-import express, { Application, Request, Response } from "express";
-import helmet from "helmet";
-import cors from "cors";
-import { HTTP_STATUS } from "@utils/http-status";
-import { rateLimiter } from "@middlewares/rate-limiter.middleware";
-import { correlationIdMiddleware } from "@middlewares/correlation-id.middleware";
-import { requestLoggerMiddleware } from "@middlewares/request-logger.middleware";
-import { errorMiddleware } from "@middlewares/error.middleware";
-import routes from "@routes/index";
-import { ProxyService } from "@proxy/proxy.service";
 import logger from "@config/logger.config";
+import { correlationIdMiddleware } from "@middlewares/correlation-id.middleware";
+import { errorMiddleware } from "@middlewares/error.middleware";
+import { rateLimiter } from "@middlewares/rate-limiter.middleware";
+import { requestLoggerMiddleware } from "@middlewares/request-logger.middleware";
+import { ProxyService } from "@proxy/proxy.service";
+import routes from "@routes/index";
+import { HTTP_STATUS } from "@utils/http-status";
+import cors from "cors";
+import express, {
+  type Application,
+  type Request,
+  type Response,
+} from "express";
+import helmet from "helmet";
 
 const createApp = (): Application => {
   const app = express();

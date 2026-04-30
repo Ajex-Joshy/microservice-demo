@@ -10,15 +10,15 @@ const adapter = new PrismaPg(pool);
 export const prisma = new PrismaClient({ adapter });
 
 export const disconnectDB = async () => {
-  await prisma.$disconnect();
-  await pool.end();
+	await prisma.$disconnect();
+	await pool.end();
 };
 
 export const checkHealth = async (): Promise<boolean> => {
-  try {
-    await prisma.$queryRaw`SELECT 1`;
-    return true;
-  } catch (error) {
-    return false;
-  }
+	try {
+		await prisma.$queryRaw`SELECT 1`;
+		return true;
+	} catch (_error) {
+		return false;
+	}
 };

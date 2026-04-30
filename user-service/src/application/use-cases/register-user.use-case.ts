@@ -12,7 +12,12 @@ export class RegisterUser {
     @inject(TYPES.PasswordService) private password: PasswordService,
   ) {}
 
-  async execute(name: string, email: string, password: string, role: UserRole = UserRole.USER) {
+  async execute(
+    name: string,
+    email: string,
+    password: string,
+    role: UserRole = UserRole.USER,
+  ) {
     const exists = await this.repo.findByEmail(email);
 
     if (exists) throw new UserAlreadyExistsException(email);

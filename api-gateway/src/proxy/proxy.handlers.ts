@@ -1,15 +1,18 @@
-import { IncomingMessage } from "http";
-import { fixRequestBody } from "http-proxy-middleware";
+import type { IncomingMessage } from "node:http";
 import logger from "@config/logger.config";
+import type { ProxyErrorResponse } from "@custom-types/proxy-error-response.types";
 import { HTTP_STATUS } from "@utils/http-status";
-import { ProxyErrorResponse } from "@custom-types/proxy-error-response.types";
 import { HEADERS } from "@utils/types";
 
 export class ProxyHandlers {
   /**
    * Handle errors during the proxy process (e.g. downstream service down)
    */
-  public static handleProxyError(err: Error, req: IncomingMessage, res: any): void {
+  public static handleProxyError(
+    err: Error,
+    req: IncomingMessage,
+    res: any,
+  ): void {
     logger.error(`[Proxy] Error on ${req.method} ${req.url}`, {
       error: err.message,
     });
@@ -61,7 +64,11 @@ export class ProxyHandlers {
   /**
    * Modify response before it is sent back to the client
    */
-  public static handleProxyResponse(proxyRes: IncomingMessage, req: IncomingMessage, res: any): void {
+  public static handleProxyResponse(
+    _proxyRes: IncomingMessage,
+    _req: IncomingMessage,
+    _res: any,
+  ): void {
     // Header adjustments if needed
   }
 }

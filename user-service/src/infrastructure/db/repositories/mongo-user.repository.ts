@@ -16,7 +16,7 @@ export class MongoUserRepository implements IUserRepository {
       if (!data) return null;
 
       return mapToDomain(data.toObject() as Record<string, unknown>);
-    } catch (error) {
+    } catch (_error) {
       throw new DatabaseException(`Failed to find user by id: ${id}`);
     }
   }
@@ -27,7 +27,7 @@ export class MongoUserRepository implements IUserRepository {
       if (!data) return null;
 
       return mapToDomain(data.toObject() as Record<string, unknown>);
-    } catch (error) {
+    } catch (_error) {
       throw new DatabaseException(`Failed to find user by email: ${email}`);
     }
   }
@@ -39,7 +39,7 @@ export class MongoUserRepository implements IUserRepository {
       const created = await UserModel.create(persistence);
 
       return mapToDomain(created.toObject() as Record<string, unknown>);
-    } catch (error) {
+    } catch (_error) {
       throw new DatabaseException("Failed to create user");
     }
   }

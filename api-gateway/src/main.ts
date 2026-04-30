@@ -1,6 +1,6 @@
-import { app } from "./app";
 import { ENV } from "@config/env.config";
 import logger from "@config/logger.config";
+import { app } from "./app";
 
 const startServer = () => {
   try {
@@ -33,7 +33,6 @@ const startServer = () => {
 
     process.on("SIGINT", () => gracefulShutdown("SIGINT"));
     process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-
   } catch (error) {
     logger.error("Failed to start server", error);
     process.exit(1);

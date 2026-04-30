@@ -1,5 +1,5 @@
-import { checkHealth } from "@infrastructure/db/mongo";
 import { TYPES } from "@config/di/types";
+import { checkHealth } from "@infrastructure/db/mongo";
 import type { AuthController } from "@interfaces/http/controllers/auth.controller";
 import type { AuthMiddleware } from "@interfaces/http/middlewares/auth.middlware";
 import type { RoleMiddleware } from "@interfaces/http/middlewares/role.middleware";
@@ -23,9 +23,12 @@ export class AuthRoutes {
   }
 
   private init() {
-    this.router.get("/health", async (req, res) => {
+    this.router.get("/health", async (_req, res) => {
       const isHealthy = await checkHealth();
-      res.json({ status: isHealthy ? "ok" : "error", database: isHealthy ? "connected" : "disconnected" });
+      res.json({
+        status: isHealthy ? "ok" : "error",
+        database: isHealthy ? "connected" : "disconnected",
+      });
     });
     this.router.post(
       "/register",
@@ -44,7 +47,7 @@ export class AuthRoutes {
     this.router.get(
       "/:id",
       this.auth.handle,
-      this.role.handle("USER"),
+      this.role.handle("ADMIN"),
       this.controller.getUserById,
     );
   }

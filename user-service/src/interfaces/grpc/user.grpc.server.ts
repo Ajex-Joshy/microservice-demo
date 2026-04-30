@@ -16,8 +16,8 @@ const proto = grpc.loadPackageDefinition(
   packageDef,
 ) as unknown as ProtoGrpcType;
 
+import { randomUUID } from "node:crypto";
 import { tracingStorage } from "@shared/tracing/tracing-context";
-import { randomUUID } from "crypto";
 
 const controller = container.get<UserGrpcController>(TYPES.UserGrpcController);
 
@@ -25,7 +25,8 @@ export const server = new grpc.Server();
 
 server.addService(proto.user.UserService.service, {
   GetUser: (call: any, callback: any) => {
-    const correlationId = call.metadata.get("x-correlation-id")[0] || randomUUID();
+    const correlationId =
+      call.metadata.get("x-correlation-id")[0] || randomUUID();
     tracingStorage.run({ correlationId }, () => {
       controller.GetUser(call, callback);
     });
